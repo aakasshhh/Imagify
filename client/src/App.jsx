@@ -8,10 +8,8 @@ import BuyCredit from './pages/BuyCredit'
 import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 import Login from './components/Login'
-import { AppContext } from './context/AppContext'
+import {AppContext}  from './context/AppContext';
 import GoogleAuthRedirect from './pages/GoogleAuthRedirect';
-
-import { AppContext } from './context/AppContext';
 
 const App = () => {
   const { showLogin, theme } = useContext(AppContext);
