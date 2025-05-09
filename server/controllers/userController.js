@@ -5,10 +5,8 @@ import razorpay from "razorpay";
 import transactionModel from "../models/transactionModel.js";
 import nodemailer from "nodemailer";
 
-// ----------------- OTP Store -------------------
-const otpStore = new Map(); // key: email, value: { otp, expiresAt }
+const otpStore = new Map(); 
 
-// ----------------- Send OTP --------------------
 const sendOTP = async (req, res) => {
     try {
         const { email } = req.body;
@@ -17,8 +15,8 @@ const sendOTP = async (req, res) => {
         const existingUser = await userModel.findOne({ email });
         if (existingUser) return res.json({ success: false, message: "User already exists" });
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
-        const expiresAt = Date.now() + 5 * 60 * 1000; // OTP valid for 5 mins
+        const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
+        const expiresAt = Date.now() + 5 * 60 * 1000; 
 
         otpStore.set(email, { otp, expiresAt });
 
@@ -47,7 +45,7 @@ const sendOTP = async (req, res) => {
     }
 };
 
-// ----------------- Verify OTP --------------------
+
 const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
@@ -71,7 +69,7 @@ const verifyOTP = async (req, res) => {
     }
 };
 
-// ----------------- Register User --------------------
+
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -84,11 +82,6 @@ const registerUser = async (req, res) => {
         if (existingUser) {
             return res.json({ success: false, message: 'User already exists' });
         }
-
-        // Optional: block registration if OTP wasn't verified
-        // if (otpStore.has(email)) {
-        //     return res.json({ success: false, message: "Please verify OTP before registering" });
-        // }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -110,7 +103,6 @@ const registerUser = async (req, res) => {
     }
 };
 
-// ----------------- Login User --------------------
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -135,7 +127,6 @@ const loginUser = async (req, res) => {
     }
 };
 
-// ----------------- User Credits --------------------
 const userCredits = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -149,13 +140,11 @@ const userCredits = async (req, res) => {
     }
 };
 
-// ----------------- Razorpay Init --------------------
 const razorpayInstance = new razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// ----------------- Razorpay Payment --------------------
 const paymentRazorpay = async (req, res) => {
     try {
         const { userId, planId } = req.body;
@@ -212,7 +201,6 @@ const paymentRazorpay = async (req, res) => {
     }
 };
 
-// ----------------- Razorpay Verification --------------------
 const verifyRazorpay = async (req, res) => {
     try {
         const { razorpay_order_id } = req.body;
